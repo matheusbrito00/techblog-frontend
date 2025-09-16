@@ -1,0 +1,54 @@
+<div class="w-full px-40 py-8">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="font-bold text-3xl">Todos os artigos</h1>
+        <button (click)="createArticle()" [disabled]="!isLogged"
+            class="px-4 py-3 bg-[#67a22d] text-white font-semibold rounded-xl hover:bg-[#67a22d]/90 disabled:bg-[#67a22d]/50">Criar
+            artigo</button>
+    </div>
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-4 overflow-x-auto no-scrollbar">
+            <ng-container *ngFor="let tag of tags">
+                <button (click)="toggleTag(tag.id)" class="py-2 px-4 rounded-2xl font-semibold shadow min-w-[150px]"
+                    [ngClass]="{'bg-[#67a22d] text-white': isTagSelected(tag.id), 'bg-[#edf2e8]': !isTagSelected(tag.id)}">{{
+                    tag.name
+                    }}</button>
+            </ng-container>
+        </div>
+        <div class="w-full">
+            <input [(ngModel)]="searchArticle" class="w-full bg-[#edf2e8] py-3 px-5 rounded-xl" type="text"
+                placeholder="Pesquisar...">
+        </div>
+    </div>
+    <div class="flex flex-col items-center justify-between gap-6 w-full mt-6">
+        <div class="max-w-full flex flex-col gap-2">
+            <ng-container *ngFor="let article of pagedArticles">
+                <div class="cursor-pointer hover:shadow-xl p-3 rounded-xl relative">
+                    <div class="p-4" *ngIf="article.image">
+                        <img class="rounded-2xl max-w-48" [src]="article.image" alt="Grão Direto">
+                    </div>
+                    <div class="flex flex-col items-start gap-4" (click)="viewArticle(article.id)">
+                        <h1 class="font-semibold">{{ article.title }}</h1>
+                        <span class="text-gray-600 w-full truncate">{{ article.content }}</span>
+                        <div class="flex items-center gap-4 flex-wrap">
+                            <span *ngFor="let tag of article.tags"
+                                class="bg-[#edf2e8] py-1 px-3 rounded-2xl font-semibold shadow">{{ tag.name }}</span>
+                        </div>
+                    </div>
+                    <button *ngIf="isLogged && (userData?.id === article.user.id || userData.isAdmin)"
+                        (click)="editArticle(article.id)" class="absolute top-3 right-3">
+                        <img src="assets/icons/edit.svg">
+                    </button>
+                </div>
+            </ng-container>
+        </div>
+        <div class="flex items-center gap-3">
+            <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+                <button (click)="goToPage(i + 1)"
+                    [ngClass]="{'bg-[#67a22d] text-white': currentPage === i + 1, 'bg-gray-200': currentPage !== i + 1}"
+                    class="px-4 py-2 rounded-full">
+                    {{ i + 1 }}
+                </button>
+            </ng-container>
+        </div>
+    </div>
+</div>

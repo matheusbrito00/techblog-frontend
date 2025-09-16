@@ -1,0 +1,7 @@
+<header class="p-4 flex items-center justify-between border-b border-b-gray-200">
+    <a class="font-bold text-xl" routerLink="">TechBlog</a>
+    <a *ngIf="!isLogged" class="text-[#67a22d] font-bold" routerLink="/signin">Entrar</a>
+    <button *ngIf="isLogged" class="text-[#67a22d] font-bold" (click)="logout()">
+        <img src="assets/icons/logout.svg" alt="Logout">
+    </button>
+</header>

@@ -1,0 +1,76 @@
+<div class="w-full px-40 py-10">
+    <div class="flex items-center gap-6">
+        <div class="flex items-center">
+            <a routerLink="/articles">
+                <img class="w-12 h-12" src="assets/icons/arrow-left.svg" alt="Voltar">
+            </a>
+            <h1 class="font-bold text-3xl">{{ article.title }}</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <span *ngFor="let tag of article.tags" class="bg-[#edf2e8] py-1 px-3 rounded-2xl font-semibold shadow">{{
+                tag.name }}</span>
+        </div>
+    </div>
+    <div class="mx-12 my-4">
+        <span class="text-lg text-gray-600">Publicado por {{ article.user.name }} &bull;
+            {{ (article.updated_at ? article.updated_at : article.created_at) | date:'shortDate'}}
+        </span>
+    </div>
+    <div class="mx-12">
+        <p class="text-lg leading-8">{{ article.content }}</p>
+    </div>
+    <div class="mx-12 my-5">
+        <h2 class="text-xl font-semibold">Comentários</h2>
+        <form [formGroup]="commentForm" (submit)="createComment()">
+            <textarea formControlName="content" class="resize-none my-3 w-full bg-[#edf2e8] py-3 px-5 rounded-xl"
+                cols="5" placeholder="Escreva um comentário..."></textarea>
+            <button *ngIf="isLogged"
+                class="px-4 py-3 bg-[#67a22d] text-white font-semibold rounded-xl hover:bg-[#67a22d]/90">Comentar</button>
+            <a *ngIf="!isLogged" routerLink="/signin"
+                class="px-4 py-3 bg-[#67a22d] text-white font-semibold rounded-xl hover:bg-[#67a22d]/90">Comentar</a>
+        </form>
+    </div>
+    <div class="mx-12">
+        <ng-container *ngFor="let comment of comments">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <h2 class="text-lg font-semibold">{{ comment.user.name }}</h2>
+                    <span class="text-gray-500">{{ (comment.updated_at ? comment.updated_at : comment.created_at) |
+                        date:'shortDate' }}</span>
+                </div>
+                <button *ngIf="isLogged && (userData?.id === article.user.id || userData.isAdmin)"
+                    (click)="deleteComment(comment.id)">
+                    <img src="assets/icons/trash.svg" alt="Delete Comment">
+                </button>
+            </div>
+            <p class="leading-8 my-3">{{ comment.content }}</p>
+            <button *ngIf="isLogged" (click)="displayFormReply = !displayFormReply">
+                <img src="assets/icons/reply.svg" alt="Reply Comment">
+            </button>
+            <form class="flex items-center gap-4" *ngIf="displayFormReply" [formGroup]="commentForm"
+                (submit)="createComment(comment.id)">
+                <textarea formControlName="content" class="resize-none my-2 w-full bg-[#edf2e8] py-2 px-4 rounded-xl"
+                    placeholder="Escreva um comentário..."></textarea>
+                <button
+                    class="px-4 py-3 bg-[#67a22d] text-white font-semibold rounded-xl hover:bg-[#67a22d]/90">Responder</button>
+            </form>
+            <div class="mx-8">
+                <ng-container *ngFor="let reply of comment.replies">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <h2 class="text-lg font-semibold">{{ reply.user.name }}</h2>
+                            <span class="text-gray-500">{{ (reply.updated_at ? reply.updated_at :
+                                reply.created_at) |
+                                date:'shortDate' }}</span>
+                        </div>
+                        <button *ngIf="isLogged && (userData?.id === article.user.id || userData.isAdmin)"
+                            (click)="deleteComment(reply.id)">
+                            <img src="assets/icons/trash.svg" alt="Delete Reply">
+                        </button>
+                    </div>
+                    <p class="leading-8 my-3">{{ reply.content }}</p>
+                </ng-container>
+            </div>
+        </ng-container>
+    </div>
+</div>
