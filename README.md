@@ -1,4 +1,4 @@
-# 📌 Projeto Frontend Angular 19 + TailwindCSS - TechBlog
+# 📌 Projeto Frontend Angular 19 + TailwindCSS - DevBlog
 
 Este projeto é o **frontend** da aplicação, desenvolvido em **Angular 19** com **TailwindCSS** para estilização.  
 Foi projetado para ser simples, moderno e performático, com foco em usabilidade.  
